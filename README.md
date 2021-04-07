@@ -2,7 +2,7 @@
 
 
 
-**About:** 
+**About:** Comparing tricks and speeds of different ways of working with databases using Python
 
 <hr>
 
