@@ -2,6 +2,7 @@ import psycopg2
 from datetime import date
 from config import db_config
 
+
 def up_connect_to_database():
     user = db_config['postgres']['user']
     password = db_config['postgres']['pass']
@@ -66,6 +67,36 @@ def create_table_pets():
     conn.close()
 
 
+def insert_into_kinds_pets(kind_pets):
+    conn = up_connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("""INSERT INTO kinds_pets(kind_pets) VALUES
+                   (%s)""", (kind_pets,))
+    conn.commit()
+    conn.close()
+
+
+def insert_into_persons(name, birth, is_relative):
+    conn = up_connect_to_database()
+    cursor = conn.cursor()
+    birthday_iso = date(birth[0], birth[1], birth[2])
+    cursor.execute("""INSERT INTO persons(name, birthday, is_relative)
+                   VALUES
+                   (%s,%s,%s)""", (name, birthday_iso, is_relative))
+    conn.commit()
+    conn.close()
+
+
+def insert_into_pets(name, kind_pets, owner):
+    conn = up_connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("""INSERT INTO pets(name, kind_pets, owner)
+                   VALUES
+                   (%s,%s,%s)""", (name, kind_pets, owner))
+    conn.commit()
+    conn.close()
+
+
 if __name__ == "__main__":
 
     drop_table_pets()
@@ -75,3 +106,18 @@ if __name__ == "__main__":
     create_table_persons()
     create_table_kinds_pets()
     create_table_pets()
+
+    insert_into_kinds_pets("cat")
+    insert_into_kinds_pets("dog")
+    insert_into_kinds_pets("bird")
+    insert_into_kinds_pets("fish")
+
+    insert_into_persons("Bob", (1980, 12, 23), True)
+    insert_into_persons("Alice", (1983, 7, 5), True)
+    insert_into_persons("Grandma L.", (1960, 5, 14), True)
+    insert_into_persons("Herb", (1977, 10, 3), False)
+
+    insert_into_pets("Kitty", 1, 1)
+    insert_into_pets("Fido", 2, 3)
+    insert_into_pets("Mittens", 1, 4)
+    insert_into_pets("Mittens Jr", 1, 4)
