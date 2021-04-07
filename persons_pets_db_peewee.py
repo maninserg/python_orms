@@ -1,6 +1,7 @@
 from peewee import *
 from datetime import date
 from config import db_config
+import time
 
 
 user = db_config['postgres']['user']
@@ -12,33 +13,31 @@ db = PostgresqlDatabase('demo4', user=user, password=password, host=host,
                         port=port)
 
 
-class Person(Model):
+class BaseModel(Model):
+
+    class Meta():
+        database = db
+
+
+class Person(BaseModel):
     name = CharField()
     birthday = DateField()
     is_relative = BooleanField()
 
-    class Meta():
-        database = db
 
-
-class KindPets(Model):
+class KindPets(BaseModel):
     kind_pets = CharField()
 
-    class Meta():
-        database = db
 
-
-class Pet(Model):
+class Pet(BaseModel):
     name = CharField()
     kind_pets = ForeignKeyField(KindPets)
     owner = ForeignKeyField(Person)
 
-    class Meta():
-        database = db
-
-
 
 if __name__ == "__main__":
+
+    start_time = time.clock()
 
     Pet.drop_table()
     Person.drop_table()
@@ -75,3 +74,6 @@ if __name__ == "__main__":
         add_pet = Pet.create(name=item["name"], kind_pets=item["kind_pets"],
                              owner=item["owner"])
         add_pet.save()
+
+    end_time = time.clock()
+    print("Time elapsed = ", end_time - start_time)

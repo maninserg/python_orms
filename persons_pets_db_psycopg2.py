@@ -1,6 +1,7 @@
 import psycopg2
 from datetime import date
 from config import db_config
+import time
 
 
 def up_connect_to_database():
@@ -99,6 +100,8 @@ def insert_into_pets(name, kind_pets, owner):
 
 if __name__ == "__main__":
 
+    start_time = time.clock()
+
     drop_table_pets()
     drop_table_persons()
     drop_table_kinds_pets()
@@ -121,3 +124,6 @@ if __name__ == "__main__":
     insert_into_pets("Fido", 2, 3)
     insert_into_pets("Mittens", 1, 4)
     insert_into_pets("Mittens Jr", 1, 4)
+
+    end_time = time.clock()
+    print("Time elapsed = ", end_time - start_time)
