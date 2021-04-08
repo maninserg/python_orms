@@ -1,7 +1,6 @@
 import psycopg2
 from datetime import date
 from config import db_config
-import time
 
 
 def up_connect_to_database():
@@ -98,49 +97,47 @@ def insert_into_pets(name, kind_pets, owner):
     conn.close()
 
 
+def drop_all_tables():
+    drop_table_pets()
+    drop_table_persons()
+    drop_table_kinds_pets()
+
+
+def create_all_tables():
+    create_table_persons()
+    create_table_kinds_pets()
+    create_table_pets()
+
+
+def insert_into_kinds_pets_all():
+    insert_into_kinds_pets("cat")
+    insert_into_kinds_pets("dog")
+    insert_into_kinds_pets("bird")
+    insert_into_kinds_pets("fish")
+
+
+def insert_into_persons_all():
+    insert_into_persons("Bob", (1980, 12, 23), True)
+    insert_into_persons("Alice", (1983, 7, 5), True)
+    insert_into_persons("Grandma L.", (1960, 5, 14), True)
+    insert_into_persons("Herb", (1977, 10, 3), False)
+
+
+def insert_into_pets_all():
+    insert_into_pets("Kitty", 1, 1)
+    insert_into_pets("Fido", 2, 3)
+    insert_into_pets("Mittens", 1, 4)
+    insert_into_pets("Mittens Jr", 1, 4)
+
+
+def main():
+    drop_all_tables()
+    create_all_tables()
+    insert_into_kinds_pets_all()
+    insert_into_persons_all()
+    insert_into_pets_all()
+
+
 if __name__ == "__main__":
 
-	start_time_sum = time.clock()
-
-	start_time = time.clock()
-	drop_table_pets()
-	drop_table_persons()
-	drop_table_kinds_pets()
-	end_time = time.clock()
-	print("Time elapsed of DROP ALL TABLES = ", round(end_time - start_time, 4))
-
-	start_time = time.clock()
-	create_table_persons()
-	create_table_kinds_pets()
-	create_table_pets()
-	end_time = time.clock()
-	print("Time elapsed of CREATE ALL TABLES = ", round(end_time - start_time, 4))
-
-	start_time = time.clock()
-	insert_into_kinds_pets("cat")
-	insert_into_kinds_pets("dog")
-	insert_into_kinds_pets("bird")
-	insert_into_kinds_pets("fish")
-	end_time = time.clock()
-	print("Time elapsed of INSERT INTO table kinds_pets {} rows = ".format(4), round(end_time - start_time, 4))
-
-	start_time = time.clock()
-	insert_into_persons("Bob", (1980, 12, 23), True)
-	insert_into_persons("Alice", (1983, 7, 5), True)
-	insert_into_persons("Grandma L.", (1960, 5, 14), True)
-	insert_into_persons("Herb", (1977, 10, 3), False)
-	end_time = time.clock()
-	print("Time elapsed of INSERT INTO table persons {} rows = ".format(4), round(end_time - start_time, 4))
-
-	start_time = time.clock()
-	insert_into_pets("Kitty", 1, 1)
-	insert_into_pets("Fido", 2, 3)
-	insert_into_pets("Mittens", 1, 4)
-	insert_into_pets("Mittens Jr", 1, 4)
-	end_time = time.clock()
-	print("Time elapsed of INSERT INTO table pets {} rows = ".format(4), round(end_time - start_time, 4))
-
-	end_time_sum = time.clock()
-	print("++++++++++++++++++++++++++++++++")
-	print("Time elapsed of SUM = ", round(end_time_sum - start_time_sum, 4))
-	print("++++++++++++++++++++++++++++++++")
+    main()
